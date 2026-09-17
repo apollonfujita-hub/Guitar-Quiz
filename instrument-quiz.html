@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ギター知識ノート</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,600&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #eef3f5;
+    --surface: #ffffff;
+    --text: #1c2b33;
+    --text-dim: #64767f;
+    --orange: #ff7e00;
+    --amber: #ffa810;
+    --blue: #1a5ca0;
+    --teal: #27a5b8;
+    --wrong: #d9534f;
+    --shadow: rgba(26,92,160,0.14);
+    --radius: 14px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  html,body{margin:0; padding:0;}
+  body{
+    background: radial-gradient(ellipse at 50% -10%, #ffffff 0%, var(--bg) 55%);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height:100vh;
+    display:flex; justify-content:center;
+    padding: 18px 12px 40px;
+  }
+  #app{ width:100%; max-width: 460px; }
+  h1,h2,h3{ font-family:'Fraunces', serif; font-weight:600; margin:0; }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--orange); opacity:0.95;
+  }
+  .plate{
+    background: linear-gradient(160deg, var(--blue), var(--teal) 120%);
+    border-radius: var(--radius); padding: 22px 20px 20px; position: relative;
+    box-shadow: 0 10px 26px var(--shadow), inset 0 0 0 1px rgba(255,255,255,0.15);
+    overflow:hidden;
+  }
+  .plate::before{
+    content:""; position:absolute; inset:0;
+    background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 6px);
+    pointer-events:none;
+  }
+  .plate .eyebrow{ color: var(--amber); }
+  .corner{ position:absolute; width:16px; height:16px; border: 2px solid rgba(255,255,255,0.55); opacity:0.8; }
+  .corner.tl{top:8px; left:8px; border-right:none; border-bottom:none;}
+  .corner.tr{top:8px; right:8px; border-left:none; border-bottom:none;}
+  .corner.bl{bottom:8px; left:8px; border-right:none; border-top:none;}
+  .corner.br{bottom:8px; right:8px; border-left:none; border-top:none;}
+  .plate h1{ font-size: 24px; color: #ffffff; letter-spacing:0.01em; margin-top:4px; padding-right:70px;}
+  .plate .sub{ color: rgba(255,255,255,0.85); font-size: 13px; margin-top:4px;}
+
+  .strings{ margin-top:18px; display:flex; flex-direction:column; gap:9px; }
+  .string-row{ display:flex; align-items:center; gap:10px; }
+  .string-label{
+    font-family:'JetBrains Mono', monospace; font-size: 10.5px; color: rgba(255,255,255,0.75);
+    width: 74px; flex-shrink:0; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .string-track{ position:relative; flex:1; height:3px; border-radius:2px; background: rgba(255,255,255,0.25); }
+  .string-fill{
+    position:absolute; top:-1.5px; left:0; height:6px; border-radius:3px;
+    background: linear-gradient(90deg, var(--orange), var(--amber));
+    box-shadow: 0 0 8px rgba(255,168,16,0.55);
+    transition: width 0.6s cubic-bezier(.2,.8,.2,1);
+  }
+  .string-pct{ font-family:'JetBrains Mono', monospace; font-size:11px; color:#ffffff; width: 34px; text-align:right; flex-shrink:0; }
+
+  .btn{
+    font-family:'DM Sans', sans-serif; font-weight:700; font-size:15px;
+    border:none; border-radius: 10px; padding: 15px 18px;
+    cursor:pointer; width:100%; text-align:center;
+    transition: transform 0.12s ease, filter 0.12s ease;
+  }
+  .btn:active{ transform: scale(0.98); }
+  .btn-primary{
+    background: linear-gradient(180deg, var(--orange), var(--amber));
+    color: #ffffff; box-shadow: 0 6px 16px rgba(255,126,0,0.32);
+  }
+  .btn-ghost{ background: transparent; color: var(--blue); border: 1px solid rgba(26,92,160,0.35); }
+  .btn-ghost:hover{ background: rgba(26,92,160,0.06); }
+  .btn-row{ display:flex; gap:10px; margin-top:10px; }
+  .btn-sm{ padding: 10px 14px; font-size:13px; }
+
+  .card{
+    background: var(--surface); border: 1px solid rgba(26,44,51,0.08);
+    border-radius: var(--radius); padding: 18px; margin-top: 14px;
+    box-shadow: 0 2px 10px rgba(26,44,51,0.04);
+  }
+  .level-card{
+    background: var(--surface); border: 1px solid rgba(26,44,51,0.08);
+    border-radius: var(--radius); padding: 16px 18px; margin-top: 12px;
+    box-shadow: 0 2px 10px rgba(26,44,51,0.04);
+  }
+  .level-head{ display:flex; align-items:center; justify-content:space-between; }
+  .level-name{ font-family:'Fraunces', serif; font-weight:600; font-size:17px; color: var(--text); }
+  .level-tag{ font-family:'JetBrains Mono', monospace; font-size:10.5px; color: var(--orange); text-transform:uppercase; letter-spacing:0.08em;}
+  .level-desc{ color: var(--text-dim); font-size:12.5px; margin-top:2px;}
+  .level-meta{ font-size:12px; color: var(--text-dim); margin: 10px 0 12px; display:flex; gap:14px; flex-wrap:wrap;}
+  .level-meta b{ color: var(--blue); font-family:'JetBrains Mono', monospace; }
+
+  .stat-grid{ display:flex; gap:10px; margin-top:12px; }
+  .stat{ flex:1; background: rgba(26,92,160,0.06); border-radius: 10px; padding: 12px 10px; text-align:center; border: 1px solid rgba(26,92,160,0.1); }
+  .stat .num{ font-family:'JetBrains Mono', monospace; font-size: 20px; color: var(--blue); font-weight:700; }
+  .stat .lbl{ font-size: 10.5px; color: var(--text-dim); margin-top:3px; }
+
+  .section-title{ font-size: 13px; color: var(--text-dim); margin: 20px 0 8px 2px; letter-spacing:0.03em; }
+
+  .topbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .link-btn{ background:none; border:none; color: var(--text-dim); font-family:'DM Sans'; font-size:13px; cursor:pointer; padding:6px 2px; }
+  .link-btn:hover{ color: var(--text); }
+  .progress-bar{ height:5px; border-radius:3px; background:rgba(26,44,51,0.08); overflow:hidden; margin-bottom:18px;}
+  .progress-fill{ height:100%; background: linear-gradient(90deg, var(--orange), var(--amber)); transition: width 0.4s ease;}
+  .q-cat{ font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--orange); text-transform:uppercase; letter-spacing:0.1em;}
+  .q-type{ font-size:11px; color: var(--text-dim); }
+  .q-text{ font-family:'Fraunces', serif; font-weight:600; font-size:19px; line-height:1.45; margin: 10px 0 18px; color: var(--text);}
+  .choice{
+    display:block; width:100%; text-align:left;
+    background: var(--surface); border: 1px solid rgba(26,44,51,0.14); color: var(--text);
+    border-radius: 10px; padding: 13px 14px; margin-bottom:10px;
+    font-family:'DM Sans'; font-size:14.5px; cursor:pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .choice:hover{ background: rgba(26,92,160,0.05); }
+  .choice.selected-correct{ border-color: var(--teal); background: rgba(39,165,184,0.14); }
+  .choice.selected-wrong{ border-color: var(--wrong); background: rgba(217,83,79,0.10); }
+  .choice.reveal-correct{ border-color: var(--teal); }
+  .choice[disabled]{ cursor:default; }
+  .fill-input{
+    width:100%; padding:13px 14px; border-radius:10px;
+    background: var(--surface); border:1px solid rgba(26,44,51,0.18);
+    color: var(--text); font-family:'DM Sans'; font-size:15px; margin-bottom:12px;
+  }
+  .fill-input:focus{ outline:none; border-color: var(--orange); }
+  .feedback{ margin-top: 4px; padding: 12px 14px; border-radius:10px; font-size:13.5px; line-height:1.5; }
+  .feedback.ok{ background: rgba(39,165,184,0.12); color: #1d7a87; border:1px solid rgba(39,165,184,0.35);}
+  .feedback.ng{ background: rgba(217,83,79,0.10); color: #b23b37; border:1px solid rgba(217,83,79,0.35);}
+
+  .score-hero{ text-align:center; padding: 10px 0 4px; }
+  .score-num{ font-family:'JetBrains Mono', monospace; font-size:52px; font-weight:700; color: #ffffff; line-height:1; }
+  .score-label{ color: rgba(255,255,255,0.85); font-size:13px; margin-top:6px; }
+  .review-item{ border-top: 1px solid rgba(26,44,51,0.08); padding: 12px 2px; font-size:13.5px; }
+  .review-item .rq{ color: var(--text); margin-bottom:4px; }
+  .review-item .ra{ color: var(--text-dim); }
+  .tag-ok{ color: var(--teal); }
+  .tag-ng{ color: var(--wrong); }
+
+  .hist-item{
+    display:flex; align-items:center; justify-content:space-between;
+    background: var(--surface); border:1px solid rgba(26,44,51,0.08);
+    border-radius:10px; padding:13px 14px; margin-top:9px; cursor:pointer;
+    box-shadow: 0 2px 8px rgba(26,44,51,0.04);
+  }
+  .hist-item:hover{ background: rgba(26,92,160,0.05); }
+  .hist-date{ font-size:12.5px; color: var(--text-dim); }
+  .hist-sub{ font-size:11px; color: var(--orange); font-family:'JetBrains Mono', monospace; margin-top:2px;}
+  .hist-score{ font-family:'JetBrains Mono', monospace; color: var(--blue); font-weight:700; }
+  .empty{ text-align:center; color: var(--text-dim); font-size:13.5px; padding: 30px 10px; }
+  .loading{ text-align:center; color: var(--text-dim); padding: 60px 10px; font-size:13px; }
+  .note{ font-size:11.5px; color: var(--text-dim); margin-top:10px; line-height:1.5; }
+  .brand-logo-img{ position:absolute; top:14px; right:14px; width:60px; height:auto; display:block; background:#ffffff; padding:4px 6px; border-radius:8px; box-shadow: 0 3px 10px rgba(0,0,0,0.18); z-index:2; }
+  .admin-link-row{ display:flex; align-items:center; justify-content:space-between; margin-top:14px; padding-top:12px; border-top:1px solid rgba(26,44,51,0.08); }
+  .whoami{ font-size:12px; color: var(--text-dim); }
+  .admin-row{ display:flex; align-items:center; gap:12px; padding:13px 16px; border-bottom:1px solid rgba(26,44,51,0.06); }
+  .admin-row:last-child{ border-bottom:none; }
+  .admin-rank{ font-family:'JetBrains Mono', monospace; font-weight:700; color: var(--text-dim); width:20px; flex-shrink:0; }
+  .admin-info{ flex:1; min-width:0; }
+  .admin-name{ font-weight:700; color: var(--text); font-size:14px; }
+  .admin-sub{ font-size:11.5px; color: var(--text-dim); margin-top:2px; }
+  .admin-levels{ display:flex; gap:12px; flex-wrap:wrap; margin-top:5px; font-size:11px; color: var(--text-dim); }
+  .admin-levels b{ color: var(--text); font-family:'JetBrains Mono', monospace; font-weight:700; }
+  .admin-pct{ font-family:'JetBrains Mono', monospace; font-weight:700; color: var(--blue); font-size:16px; flex-shrink:0; }
+  .field-label{ font-size:12px; color: var(--text-dim); margin-bottom:8px; font-weight:700; }
+  .store-grid{ display:flex; flex-direction:column; gap:8px; }
+  .store-btn{
+    text-align:left; padding:12px 14px; border-radius:10px;
+    background: var(--surface); border:1px solid rgba(26,44,51,0.15); color: var(--text);
+    font-family:'DM Sans'; font-size:14.5px; cursor:pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .store-btn:hover{ background: rgba(26,92,160,0.05); }
+  .store-btn.selected{ border-color: var(--blue); background: rgba(26,92,160,0.1); font-weight:700; color: var(--blue); }
+  .store-heading{ font-family:'Fraunces', serif; font-weight:600; font-size:15px; color: var(--text); padding:14px 16px 4px; }
+  .store-heading .store-sub{ font-family:'DM Sans'; font-weight:400; font-size:11.5px; color: var(--text-dim); margin-left:8px; }
+</style>
+</head>
+<body>
+<div id="app"><div class="loading">開いています…</div></div>
+
+
+<script>
+/* ============================= 問題データベース(ギター特化) ============================= */
+/* レベルごとに配列順=出題順。ここに追記していけば自動的に150問まで拡張できます。 */
+const QUESTIONS = {
+  '初級': [
+    {id:'b1', type:'mc', q:'エレキギターの弦は何本が標準?', options:['4本','5本','6本','7本'], answer:'6本', exp:'エレキ・アコースティックともに標準は6本です。'},
+    {id:'b2', type:'mc', q:'アコースティックギターの弦は何本が標準?', options:['4本','6本','8本','12本'], answer:'6本', exp:'12弦モデルなどもありますが、標準は6本です。'},
+    {id:'b3', type:'tf', q:'エレキギターは単体ではほとんど音が出ないため、通常アンプに接続して音を出す。', answer:true, exp:'エレキギターの生音は小さく、実用的にはアンプで増幅します。'},
+    {id:'b4', type:'tf', q:'アコースティックギターは電気を使わなくてもボディの共鳴だけで演奏できる。', answer:true, exp:'弦の振動をボディ内部で共鳴・増幅させる構造だからです。'},
+    {id:'b5', type:'fill', q:'弦を巻いて音程を調整する、ヘッド部分にある部品を何という?', accept:['ペグ','チューニングペグ','糸巻き','peg','tuning peg','machine head'], exp:'「ペグ(チューニングペグ)」で弦の張力=音程を調整します。'},
+    {id:'b6', type:'mc', q:'指板上にあり、押さえる位置で音程を区切る金属の帯を何という?', options:['ナット','フレット','ブリッジ','サドル'], answer:'フレット', exp:'押さえるフレット位置によって音程が決まります。'},
+    {id:'b7', type:'mc', q:'弦の一端を固定し、ボディに振動を伝える部品は?', options:['ペグ','ナット','ブリッジ','ピックガード'], answer:'ブリッジ', exp:'ブリッジは弦の張力を受け止め、振動をボディに伝える重要な部品です。'},
+    {id:'b8', type:'fill', q:'ギターの一番太い6弦(開放弦)の音名は?', accept:['E'], exp:'標準チューニングでは6弦から順に E-A-D-G-B-E です。'},
+    {id:'b9', type:'mc', q:'エレキギターで、弦の振動を電気信号に変える部品は?', options:['マイク','ピックアップ','スピーカー','アンプ'], answer:'ピックアップ', exp:'ピックアップが弦の振動を電気信号に変換し、アンプで増幅します。'},
+    {id:'b10', type:'tf', q:'クラシックギターとアコースティック(フォーク)ギターは同じ種類の弦を使う。', answer:false, exp:'クラシックはナイロン弦、アコースティックは主にスチール(またはブロンズ系)弦です。'},
+    {id:'b11', type:'mc', q:'指で弾く代わりに使う、弦をはじくための道具は?', options:['カポ','ピック','ペグ','ノブ'], answer:'ピック', exp:'「ピック(プレクトラム)」は弦を弾くための道具です。'},
+    {id:'b12', type:'tf', q:'カポタストは音程を下げるための道具である。', answer:false, exp:'カポは弦を締めて音程を「上げる」ための道具で、キー変更に使います。'},
+    {id:'b13', type:'mc', q:'ギターのボリュームや音色を調整するツマミの名称は?', options:['ノブ','ペグ','フレット','ブリッジ'], answer:'ノブ', exp:'ボリューム・トーンなどの調整ツマミを「ノブ」と呼びます。'},
+    {id:'b14', type:'fill', q:'弦の太さのことを何と呼ぶ?', accept:['ゲージ','gauge'], exp:'弦の太さは「ゲージ」で表され、数値が大きいほど太くなります。'},
+    {id:'b15', type:'tf', q:'エレキギターのボディは基本的に空洞ではなく木材の塊(ソリッド)が主流である。', answer:true, exp:'ソリッドボディが主流で、ハウリングに強くサステインが長い特徴があります。'},
+    {id:'b16', type:'mc', q:'アコースティックギターの表面にある丸い穴を何という?', options:['サウンドホール','ピックホール','エアホール','レゾナンスホール'], answer:'サウンドホール', exp:'サウンドホールから音が放出され、ボディ内部の共鳴を活かします。'},
+    {id:'b17', type:'mc', q:'ギターを肩にかけて立って弾くための帯は?', options:['ベルト','ストラップ','サドル','スリング'], answer:'ストラップ', exp:'「ストラップ」を使うと立奏や座奏で安定して構えられます。'},
+    {id:'b18', type:'tf', q:'弦は使っているうちに劣化するので、定期的な交換が必要である。', answer:true, exp:'錆・伸び・音のこもりが出るため、演奏頻度に応じた交換が推奨されます。'},
+    {id:'b19', type:'fill', q:'弦とネックの境目にあり、弦の間隔を支える溝付きの部品は?', accept:['ナット','nut'], exp:'「ナット」がヘッド側で弦の間隔と高さの基準を作ります。'},
+    {id:'b20', type:'mc', q:'ギター本体を保護して持ち運ぶための箱状の道具は?', options:['ケース','ラック','スタンド','フック'], answer:'ケース', exp:'ハードケースやソフトケース(ギグバッグ)で持ち運び・保管します。'},
+    {id:'b21', type:'tf', q:'エレキギターとアコースティックギターでは、必要な周辺機材(アンプ等)が異なる。', answer:true, exp:'エレキは基本的にアンプが必要ですが、アコースティックは不要です。'},
+    {id:'b22', type:'mc', q:'一般的なギターのチューニング(標準)で、最も低い6弦の音は?', options:['E','A','G','C'], answer:'E', exp:'標準チューニングは低い方からE-A-D-G-B-Eです。'},
+    {id:'b23', type:'mc', q:'エレキギターをアンプにつなぐ際に使うケーブルの接続部分を何という?', options:['シールドジャック','USBポート','HDMI端子','電源プラグ'], answer:'シールドジャック', exp:'いわゆる「シールド(ケーブル)」を挿す1/4インチジャックです。'},
+    {id:'b24', type:'tf', q:'弾いた後に弦の汗や汚れを拭き取ると、弦が長持ちする。', answer:true, exp:'皮脂や汗は弦の劣化・サビの原因になるため、拭き取りが有効です。'},
+    {id:'b25', type:'fill', q:'ギター本体の、弦を張るために首のように伸びる細長い部分を何という?', accept:['ネック','neck'], exp:'「ネック」にフレットや指板が取り付けられています。'},
+    {id:'b26', type:'mc', q:'弦を押さえて音程を作る、ネック表面の板状の部分は?', options:['指板','ヘッド','ブリッジ','ボディトップ'], answer:'指板', exp:'「指板(フィンガーボード)」の上にフレットが並びます。'},
+    {id:'b27', type:'tf', q:'アコースティックギターは湿度の変化に弱く、保管環境に注意が必要である。', answer:true, exp:'木材が湿度で膨張・収縮するため、割れや反りにつながることがあります。'},
+    {id:'b28', type:'mc', q:'複数のピックアップを切り替えるためのスイッチを何という?', options:['トーンスイッチ','ピックアップセレクター','キルスイッチ','マスタースイッチ'], answer:'ピックアップセレクター', exp:'ネック側・ブリッジ側などピックアップの組み合わせを切り替えます。'},
+    {id:'b29', type:'fill', q:'ギター本体で最も面積が大きい、共鳴・演奏の基盤となる部分を何という?', accept:['ボディ','body'], exp:'「ボディ」は音質や重さ、デザインにも大きく関わる部分です。'},
+    {id:'b30', type:'tf', q:'一般的なギターの1弦(一番細い弦)は、6弦より高い音が出る。', answer:true, exp:'6弦が最低音、1弦が最高音になるように張られています。'},
+    {id:'b31', type:'mc', q:'弦交換や各部の調整をまとめて行うメンテナンス作業を何という?', options:['セットアップ','リペア','リフレット','チューニング'], answer:'セットアップ', exp:'弦高・オクターブ調整などをまとめて行う作業を「セットアップ」と呼びます。'},
+    {id:'b32', type:'mc', q:'ピックには厚み(硬さ)の違いがあり、主に何と呼ばれる基準で選ぶ?', options:['厚さ(ミリ数)','重さ(グラム)','長さ(センチ)','幅(インチ)'], answer:'厚さ(ミリ数)', exp:'薄い・普通・厚いなど、ミリ数表記で弾き心地や音の硬さが変わります。'},
+    {id:'b33', type:'tf', q:'初心者用ギターは、価格だけでなく「押さえやすさ」も選ぶ基準になる。', answer:true, exp:'弦高や弦のテンションが高すぎると挫折しやすいため重要な観点です。'},
+    {id:'b34', type:'fill', q:'アンプを使わなくても生音が出て、かつピックアップも搭載されたアコースティックギターを俗に何という?', accept:['エレアコ','acoustic-electric','acoustic electric','electric acoustic'], exp:'「エレアコ(エレクトリック・アコースティックギター)」はライブなどでPA接続もできます。'},
+    {id:'b35', type:'mc', q:'一般的なギターのフレット数のおおよその範囲は?', options:['5〜8','12〜15','19〜24','30〜40'], answer:'19〜24', exp:'機種によって差はありますが、19〜24フレット前後が一般的です。'},
+    {id:'b36', type:'tf', q:'弦の材質は、エレキギターは主にスチール(ニッケル等)、クラシックギターは主にナイロンが使われる。', answer:true, exp:'アコースティックはブロンズ系のスチール弦が主流です。'},
+    {id:'b37', type:'mc', q:'6弦→1弦の順で並べたとき、正しい開放弦の音の並びは?', options:['E A D G B E','E A D G C E','A D G C E A','E B G D A E'], answer:'E A D G B E', exp:'標準チューニングは6弦から E-A-D-G-B-E です。'},
+    {id:'b38', type:'fill', q:'ギター本体のうち、弦を巻くペグが並んでいる先端部分を何という?', accept:['ヘッド','ヘッドストック','head','headstock'], exp:'「ヘッド(ヘッドストック)」にペグが並んでいます。'},
+    {id:'b39', type:'tf', q:'弦高(弦と指板の距離)が高すぎると、初心者にとって弾きにくく感じることが多い。', answer:true, exp:'弦を押さえる力が余計に必要になり、指が痛くなりやすくなります。'},
+    {id:'b40', type:'mc', q:'ピックガードの主な役割は?', options:['ボディ表面の傷防止','音量アップ','弦交換の補助','チューニング安定'], answer:'ボディ表面の傷防止', exp:'ピック等でボディが傷つくのを防ぐパーツです。'},
+  ],
+  '中級': [
+    {id:'m1', type:'mc', q:'ノイズに強く太い音が特徴のピックアップは?', options:['シングルコイル','ハムバッカー','ピエゾ','アクティブのみ'], answer:'ハムバッカー', exp:'2つのコイルでノイズを打ち消し合う構造です。'},
+    {id:'m2', type:'mc', q:'明るくクリアな音だがノイズを拾いやすいピックアップは?', options:['ハムバッカー','シングルコイル','ピエゾ','マイク式'], answer:'シングルコイル', exp:'ストラトキャスター等に多く使われる音色です。'},
+    {id:'m3', type:'tf', q:'レスポールタイプは主にマホガニーボディにメイプルトップの組み合わせが多い。', answer:true, exp:'太く甘いサウンドの一因とされる代表的な組み合わせです。'},
+    {id:'m4', type:'fill', q:'ストラトキャスタータイプに標準搭載されることが多いピックアップの数は?', accept:['3'], exp:'フロント・センター・リアの3basic基本構成が一般的です。'},
+    {id:'m5', type:'mc', q:'アコースティックギター内部で表板を支え、音質・強度に関わる木の骨組みを何という?', options:['トラスロッド','ブレイシング','バインディング','ネックブロック'], answer:'ブレイシング', exp:'「ブレイシング(力木)」の配置が音の特性に大きく影響します。'},
+    {id:'m6', type:'tf', q:'12弦ギターは通常の6弦を基本に、複弦(2本ずつ)にしたものである。', answer:true, exp:'厚みのある独特の響きが特徴です。'},
+    {id:'m7', type:'mc', q:'ネックの太さ・断面形状のことを何という?', options:['ネックシェイプ','ボディシェイプ','ヘッドシェイプ','フレットシェイプ'], answer:'ネックシェイプ', exp:'握りやすさに直結する要素で、機種によって異なります。'},
+    {id:'m8', type:'fill', q:'弦高やオクターブチューニングなどの調整作業をまとめて何という?', accept:['セットアップ','setup'], exp:'購入後や弦交換時に「セットアップ」で弾きやすさを整えます。'},
+    {id:'m9', type:'mc', q:'アコースティックギターのボディサイズで最も大きく低音が豊かなタイプの一つは?', options:['パーラー','ドレッドノート','コンサート','ミニ'], answer:'ドレッドノート', exp:'力強い低音とボリュームが特徴の定番サイズです。'},
+    {id:'m10', type:'tf', q:'一般的にアコースティックギターの弦は、エレキギターよりやや太め(ゲージが大きい)傾向がある。', answer:true, exp:'ボディを鳴らすためにテンションを確保する必要があるためです。'},
+    {id:'m11', type:'fill', q:'ネックと指板の境目で弦の間隔を支える溝付きの部品は?(初級の復習)', accept:['ナット','nut'], exp:'ナットの溝の高さも弦高・弾き心地に影響します。'},
+    {id:'m12', type:'mc', q:'木材の乾燥・湿度変化によるネックの反りを調整する内部の金属パーツは?', options:['トラスロッド','ブリッジピン','サドル','エンドピン'], answer:'トラスロッド', exp:'ネック内部に仕込まれ、反りを調整できます。'},
+    {id:'m13', type:'tf', q:'セミアコースティックギターはボディ内部が完全な空洞ではなく一部空洞構造である。', answer:true, exp:'中央にセンターブロックを持つものが多く、フィードバックに強い設計です。'},
+    {id:'m14', type:'mc', q:'アームでピッチを変化させる装置の名称は?', options:['トレモロユニット','サステイナー','コンプレッサー','イコライザー'], answer:'トレモロユニット', exp:'俗に「アーム」と呼ばれる機構で音程を揺らせます。'},
+    {id:'m15', type:'mc', q:'ボディサイズが小さく、繊細で軽やかな音が特徴のアコースティック形状は?', options:['ドレッドノート','ジャンボ','パーラー','グランドオーケストラ'], answer:'パーラー', exp:'小ぶりで抱えやすく、まろやかな音色が特徴です。'},
+    {id:'m16', type:'tf', q:'フェンダー系ギターは一般にスケール長(弦長)がギブソン系よりやや長い傾向がある。', answer:true, exp:'フェンダー系は約25.5インチ、ギブソン系は約24.75インチが目安です。'},
+    {id:'m17', type:'fill', q:'ネックとボディをネジで固定する接合方式を何という?', accept:['ボルトオン','bolt-on','bolt on','bolton'], exp:'交換・調整がしやすい反面、鳴りの傾向が異なるとされます。'},
+    {id:'m18', type:'mc', q:'接着剤でネックとボディを固定する接合方式は?', options:['ボルトオン','セットネック','スルーネック','クランプ式'], answer:'セットネック', exp:'レスポールなどに多い接合方式です。'},
+    {id:'m19', type:'tf', q:'エレキギターの「ソリッドボディ」は音のサステイン(伸び)が長い傾向がある。', answer:true, exp:'空洞が少ない分、振動のロスが少ないとされます。'},
+    {id:'m20', type:'mc', q:'ハムバッカーが2つのコイルを組み合わせる主な目的は?', options:['ノイズ(ハム音)の除去','音量を2倍にする','弦のテンションを下げる','チューニングを安定させる'], answer:'ノイズ(ハム音)の除去', exp:'2つのコイルの磁極を逆にしてノイズを打ち消します。'},
+    {id:'m21', type:'fill', q:'フレット間隔や弦長の設計を指す用語は?', accept:['スケール','スケール長','scale','scale length'], exp:'「スケール(長)」がテンション感や弾き心地に影響します。'},
+    {id:'m22', type:'mc', q:'アコースティックギターの弦に使われることが多い、明るい響きが特徴の合金弦は?', options:['ニッケル弦','フォスファーブロンズ弦','ステンレス弦','ナイロン弦'], answer:'フォスファーブロンズ弦', exp:'暖かみのある明るい響きが特徴とされる代表的な弦種です(Phosphor Bronze)。'},
+    {id:'m23', type:'tf', q:'エレアコには、生音とライン出力(PA接続)を切り替え・併用できる機種が多い。', answer:true, exp:'内蔵プリアンプでライブ会場のPAに直接出力できます。'},
+    {id:'m24', type:'mc', q:'弦とフレットの接触位置ずれによる音程のズレを補正する調整を何という?', options:['オクターブ調整','弦高調整','トラスロッド調整','ピッチベンド'], answer:'オクターブ調整', exp:'12フレットの実音と開放弦の音程を合わせる調整です。'},
+    {id:'m25', type:'fill', q:'一般的なアコースティックギターでネックとボディが接合する目安として多いフレット位置は?', accept:['14'], exp:'「14フレットジョイント」が現代的なアコースティックの標準的な設計です。'},
+    {id:'m26', type:'tf', q:'エレキギターの音色は、ピックアップの種類だけでなく弾く位置(ピッキング位置)でも変化する。', answer:true, exp:'ブリッジ寄りで弾くと硬め、ネック寄りで弾くと柔らかめの音になります。'},
+    {id:'m27', type:'mc', q:'ギター本体から直接ケーブルでアンプに接続する方式を何という?', options:['シールド接続','ワイヤレス接続','MIDI接続','Bluetooth接続'], answer:'シールド接続', exp:'いわゆる「シールドケーブル」を使った有線接続です。'},
+    {id:'m28', type:'fill', q:'エフェクトをかけず素の音でアンプに接続した状態を俗に何という?', accept:['クリーン','クリーントーン','clean','clean tone'], exp:'歪みのない状態を「クリーン(トーン)」と呼びます。'},
+    {id:'m29', type:'tf', q:'弦のゲージが太いほど、一般的にテンション(張力)が強くなる。', answer:true, exp:'太い弦ほど張力が強くなり、弾き心地や音の硬さが変わります。'},
+    {id:'m30', type:'mc', q:'カッタウェイ(カットアウェイ)ボディの主な目的は?', options:['ハイポジションを弾きやすくする','軽量化のみ','音量を上げる','弦交換をしやすくする'], answer:'ハイポジションを弾きやすくする', exp:'ボディが欠けた形状で高いフレットへのアクセスがしやすくなります。'},
+    {id:'m31', type:'fill', q:'ギターの音を歪ませる代表的なエフェクターの種類を1つ挙げると?', accept:['ディストーション','オーバードライブ','distortion','overdrive'], exp:'「ディストーション」「オーバードライブ」が代表的な歪み系エフェクトです。'},
+    {id:'m32', type:'tf', q:'アコースティックギターのサドルの高さ調整は、弦高(弾きやすさ)に影響する。', answer:true, exp:'サドルを削る・交換することで弦高を調整できます。'},
+    {id:'m33', type:'mc', q:'ネックの反りを簡易的に確認する一般的な方法は?', options:['弦を押さえて隙間を見る','弦を全部外して見る','ボディを叩いて音を聞く','ペグを回してみる'], answer:'弦を押さえて隙間を見る', exp:'1フレットと最終フレット付近を押さえ、中間の弦と指板の隙間を確認します。'},
+    {id:'m34', type:'fill', q:'弦交換の際に確認しておくと良い、各弦の張力設計(太さの組み合わせ)を指す言葉は?', accept:['ゲージ','ゲージセット','gauge','gauge set'], exp:'「(弦の)ゲージセット」を揃えることでテンションバランスが保たれます。'},
+    {id:'m35', type:'mc', q:'ピエゾピックアップが主に使われるのは?', options:['ソリッドのエレキギター','アコースティック(エレアコ)','ベースアンプ内部','エフェクトペダル'], answer:'アコースティック(エレアコ)', exp:'ブリッジ内部などに埋め込み、生音に近い信号を拾います。'},
+    {id:'m36', type:'tf', q:'エレキギターのブリッジには、固定式とトレモロ(可動)式の2タイプがある。', answer:true, exp:'固定式は音の安定性、トレモロ式は表現力に優れるとされます。'},
+    {id:'m37', type:'mc', q:'弦交換後すぐに音程が安定しない主な理由は?', options:['弦が伸びきっていないため','ペグが壊れているため','ナットが汚れているため','アンプの故障のため'], answer:'弦が伸びきっていないため', exp:'新しい弦は伸びが落ち着くまでチューニングが安定しにくいです。'},
+    {id:'m38', type:'fill', q:'ピックアップの位置(ネック側・ブリッジ側等)を指す言葉は?', accept:['ポジション','position'], exp:'「ポジション」によって音のキャラクターが変わります。'},
+    {id:'m39', type:'tf', q:'アコースティックギターは温度・湿度変化でボディが変形することがあるため、保管環境に注意が必要である。', answer:true, exp:'極端な乾燥・多湿はひび割れや接着剥がれの原因になります。'},
+    {id:'m40', type:'mc', q:'「バインディング」とは何か?', options:['ボディやネック縁の装飾・保護の縁取り加工','弦の巻き方の種類','ピックアップの配線方式','ネックの接合方式'], answer:'ボディやネック縁の装飾・保護の縁取り加工', exp:'見た目の高級感だけでなく、エッジの保護の役割もあります。'},
+  ],
+  '上級': [
+    {id:'a1', type:'mc', q:'フェンダー系ギターに多いスケール長は?', options:['24.75インチ','25.5インチ','26.5インチ','23インチ'], answer:'25.5インチ', exp:'ストラトキャスターやテレキャスターに多い規格です。'},
+    {id:'a2', type:'fill', q:'ギブソン系ギターに多い、フェンダー系よりやや短いスケール長は約何インチ?', accept:['24.75'], exp:'レスポールなどに多い規格で、テンション感がやや柔らかく感じられます。'},
+    {id:'a3', type:'tf', q:'バインディングはボディやネックの縁を装飾・保護するための縁取り加工である。', answer:true, exp:'高級機種に多く見られる仕上げです。'},
+    {id:'a4', type:'mc', q:'ワシントン条約(CITES)で取引が厳しく規制されている木材の一つで、指板等に使われてきたのは?', options:['スプルース','ローズウッド','バスウッド','アルダー'], answer:'ローズウッド', exp:'国際的な資源保護のため、輸出入に規制がかかっています。'},
+    {id:'a5', type:'fill', q:'力木がアルファベットのXの形に交差配置されるアコースティックギターのブレイシング構造を何という?', accept:['Xブレイシング','x bracing','x-bracing','xbracing'], exp:'現代のスチール弦アコースティックで広く使われる構造です。'},
+    {id:'a6', type:'mc', q:'ローステッド(トーステッド)メイプルなど木材を加熱処理する主な目的は?', options:['安定性向上・経年変化の再現','重量を増やすため','色を白くするため','虫食い防止のみ'], answer:'安定性向上・経年変化の再現', exp:'含水率を下げ、経年変化に近い状態を人工的に作り出す加工です。'},
+    {id:'a7', type:'tf', q:'一部ブランドは「ワイドファット」等、ネック形状に独自の名称をつけていることがある。', answer:true, exp:'メーカーごとに握り心地の呼称・規格が異なります。'},
+    {id:'a8', type:'mc', q:'アクティブピックアップの特徴として正しいのは?', options:['内蔵プリアンプ(電池)で出力・音質を補正する','電池が不要である','必ずシングルコイルである','磁石を使わない'], answer:'内蔵プリアンプ(電池)で出力・音質を補正する', exp:'電池を使い、出力の高さや音質の補正が可能です。'},
+    {id:'a9', type:'tf', q:'フレット材の主流はニッケルシルバー(洋白)だが、耐久性の高いステンレス製フレットも存在する。', answer:true, exp:'ステンレスは摩耗しにくい反面、加工の手間がかかるとされます。'},
+    {id:'a10', type:'fill', q:'指板の丸み(アール)がナット側からボディ側にかけて変化する設計を何という?', accept:['コンパウンドラジアス','compound radius'], exp:'ローポジションは握りやすく、ハイポジションはチョーキングしやすくなります。'},
+    {id:'a11', type:'mc', q:'弦をボディ裏から通して固定する構造(レスポール・テレキャスター等に見られる)を何という?', options:['スルーボディ(ストリングスルー)','スルーネック','セットネック','ボルトオン'], answer:'スルーボディ(ストリングスルー)', exp:'弦の振動特性やサステインに影響するとされる構造です。'},
+    {id:'a12', type:'tf', q:'フレットの「打ち替え」(リフレット)は、演奏で摩耗したフレットを新しいものに交換する作業である。', answer:true, exp:'弦が触れる部分がすり減った際に行うメンテナンス作業です。'},
+    {id:'a13', type:'mc', q:'ネックにボディ材を貫通させ一体化させる、ハイエンドモデルに見られる構造は?', options:['スルーネック','ボルトオン','セットネック','ヒールレス'], answer:'スルーネック', exp:'ネックとボディが一体化し、サステインが伸びやすいとされます。'},
+    {id:'a14', type:'fill', q:'磁石とコイルで振動を拾う方式に対し、圧電素子で弦やボディの振動を拾う方式を何という?', accept:['ピエゾ','piezo'], exp:'「ピエゾ(ピックアップ)」はアコースティック系でよく使われます。'},
+    {id:'a15', type:'tf', q:'「ヴィンテージ配線」とは、古い年代のギターで一般的だった配線方式を再現したものを指すことがある。', answer:true, exp:'部品の種類や配線ルートの違いで音のニュアンスが変わるとされます。'},
+    {id:'a16', type:'mc', q:'硬さ・耐久性で知られ、ローズウッドの代替材としても使われる黒い指板材は?', options:['エボニー(黒檀)','バスウッド','アガチス','パーフェロー'], answer:'エボニー(黒檀)', exp:'高級機種の指板に使われることが多い緻密で硬い木材です。'},
+    {id:'a17', type:'fill', q:'ネックの反りの状態のうち、弦高が高くなる方向の反りを何という?(反対語は逆反り)', accept:['順反り','up bow','forward bow','up-bow'], exp:'順反りは弦高が上がり、逆反りは弦がビビりやすくなります。'},
+    {id:'a18', type:'mc', q:'フロイドローズに代表される、弦をロックして固定するタイプのブリッジ機構は?', options:['ロッキングトレモロ','シンクロナイズドトレモロ','固定ブリッジ','チューンオーマチック'], answer:'ロッキングトレモロ', exp:'激しいアーミングでもチューニングが狂いにくい構造です。'},
+    {id:'a19', type:'tf', q:'「デッドスポット」とは、特定のフレットで音が異常に減衰・不自然に響く現象を指す。', answer:true, exp:'ネックの共振特性によって起こるとされる現象です。'},
+    {id:'a20', type:'mc', q:'アコースティックギターの「サドル」の主な材質としてよく使われるのは?', options:['牛骨(ボーン)','ゴム','鉄','プラスチックのみ'], answer:'牛骨(ボーン)', exp:'牛骨は音の伝達性に優れるとされ、上位機種でよく使われます。'},
+    {id:'a21', type:'fill', q:'ステンレス製の弦は主に何が長所とされる?', accept:['耐久性','サビにくさ','durability','corrosion resistance','rust resistance'], exp:'錆びにくく、フレットの摩耗が早いという特徴もあります。'},
+    {id:'a22', type:'mc', q:'ピックと指を併用する奏法を何という?', options:['ハイブリッドピッキング','スイープピッキング','タッピング','スラップ'], answer:'ハイブリッドピッキング', exp:'ピックで低音弦、指で高音弦を同時に弾くテクニックです。'},
+    {id:'a23', type:'tf', q:'ネックの「Cシェイプ」「Uシェイプ」などは、握った時の断面形状の違いを表す表現である。', answer:true, exp:'アルファベットの形に見立てた握り心地の分類です。'},
+    {id:'a24', type:'mc', q:'「PAF」という略称が指すのは主に何のパーツ?', options:['ハムバッカー(ピックアップ)','ペグ','ブリッジ','ケーブル'], answer:'ハムバッカー(ピックアップ)', exp:'“Patent Applied For”の略で、初期ハムバッカーを指す歴史的な呼び名です。'},
+    {id:'a25', type:'fill', q:'アース処理が不十分なノイズ対策として、内部に貼られる金属の粘着シートを何という?', accept:['シールドテープ','銅箔テープ','shielding tape','copper tape','copper foil tape'], exp:'ボディ内部やキャビティに貼りノイズを抑えます。'},
+    {id:'a26', type:'tf', q:'ネックジョイントの「ヒール」形状は、ハイポジションの弾きやすさに影響する。', answer:true, exp:'ヒールが小さい・削られた設計ほど高いフレットにアクセスしやすくなります。'},
+    {id:'a27', type:'mc', q:'トップ材に「フレイムメイプル」を使う主な理由は?', options:['美しい杢目(見た目)の装飾性','極端な軽量化','コスト削減','耐水性の向上'], answer:'美しい杢目(見た目)の装飾性', exp:'木目の美しさから高級モデルの化粧材として好まれます。'},
+    {id:'a28', type:'fill', q:'弦ごとに音程微調整・オクターブ調整が個別に可能なブリッジ上のパーツを何という?', accept:['サドル','個別サドル','saddle','individual saddle'], exp:'各弦のサドル位置を前後させて音程を微調整します。'},
+    {id:'a29', type:'tf', q:'アコースティックギターの「スキャロップドブレイシング」は、力木を削って軽量化し響きを豊かにする加工である。', answer:true, exp:'響きを重視した仕上げで、ヴィンテージ系の音作りにも関係します。'},
+    {id:'a30', type:'mc', q:'ヴィンテージギターの価値を左右する要素として重視される、製造時期を示す情報は?', options:['シリアルナンバー(製造年)','弦のブランド','ケースの色','ピックの厚さ'], answer:'シリアルナンバー(製造年)', exp:'製造年代・工場によって評価や希少性が変わります。'},
+    {id:'a31', type:'fill', q:'音量を絞っても高域が失われにくくする配線上の工夫を何という?', accept:['トレブルブリード','トレブルブリード回路','treble bleed','treble bleed circuit'], exp:'ボリュームを下げた際のこもりを軽減する回路です。'},
+    {id:'a32', type:'tf', q:'「コイルタップ」とは、ハムバッカーの片方のコイルだけを使いシングルコイルのような音を出す機能である。', answer:true, exp:'スイッチやプッシュプルポットで切り替えられることが多い機能です。'},
+    {id:'a33', type:'mc', q:'ヘッド角度(ヘッドの傾斜)が影響を与える要素として関係が深いのは?', options:['弦の張力・ナットへの圧力','ボディの重さ','ピックアップの出力','フレットの本数'], answer:'弦の張力・ナットへの圧力', exp:'角度によってナットでの弦の押さえつけ方が変わります。'},
+    {id:'a34', type:'fill', q:'木材の含水率を落ち着かせるための、楽器製作前の木材処理工程を何という?', accept:['乾燥','枯らし','drying','seasoning'], exp:'十分に乾燥・安定させた木材を使うことで音質や耐久性が安定するとされます。'},
+    {id:'a35', type:'tf', q:'「オールドウッド(経年木材)」は分子変化により音質が変化するとされ、ヴィンテージ楽器で重視されることがある。', answer:true, exp:'経年変化による音の枯れ・鳴りの良さが評価されることがあります。'},
+    {id:'a36', type:'mc', q:'フレットの高さ・幅の規格の違いが主に影響を与えるのは?', options:['弾き心地・チョーキングのしやすさ','ボディの重量','弦の本数','ネックの色'], answer:'弾き心地・チョーキングのしやすさ', exp:'ジャンボフレットなど、規格によってプレイスタイルへの適性が変わります。'},
+    {id:'a37', type:'fill', q:'表面が滑らかで指音(フレットノイズ)が少ない、ラウンドワウンドとは異なる巻き方の弦を何という?', accept:['フラットワウンド','flatwound','flat wound'], exp:'ジャズなど滑らかな音色を求めるジャンルで好まれます。'},
+    {id:'a38', type:'tf', q:'「ネックスルー」構造は一般にサステイン(音の伸び)が長くなる傾向があるとされる。', answer:true, exp:'ネックとボディが一体化することで振動のロスが少なくなるためです。'},
+    {id:'a39', type:'mc', q:'ギターのリフィニッシュ(再塗装)は、ヴィンテージ楽器の評価において一般的にどう扱われるか?', options:['価値が下がることが多い','価値が必ず上がる','評価に影響しない','新品として扱われる'], answer:'価値が下がることが多い', exp:'オリジナル塗装が保たれているかは、ヴィンテージ評価の重要な要素です。'},
+    {id:'a40', type:'fill', q:'ピックアップを弦に近づけすぎると、磁力が弦の振動を妨げてしまう現象を何と呼ぶことがある?', accept:['磁力干渉','マグネットプル','magnetic pull','string pull'], exp:'ピックアップの高さ調整では、この磁力干渉にも注意が必要です。'},
+  ],
+};
+
+const LOGO_B64 = "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";
+const LEVELS = ['初級','中級','上級'];
+const LEVEL_DESC = { '初級':'基礎知識・パーツ名', '中級':'構造・機材の実践知識', '上級':'専門用語・マニアック知識' };
+const SESSION_SIZE = 10;
+const TARGET_PER_LEVEL = 100; // 将来的な拡張目標(10問×10セット)
+const STORAGE_KEY = 'guitar-quiz-progress-v1';
+const NAME_KEY = 'guitar-quiz-employee-name';
+const STORE_KEY = 'guitar-quiz-employee-store';
+const STORES = ['新潟店','長岡店','三条店','イオン西店','イオンモール新発田店'];
+const EMPLOYEE_PREFIX = 'guitar-quiz-employee:';
+const EMPLOYEE_INDEX_KEY = 'guitar-quiz-employee-index-v2'; // 挑戦したことがある{店舗,名前}の一覧(共有)
+const ADMIN_PASSCODE = '0827'; // 管理者用の簡易パスコード。変更したい場合はここを書き換えてください。
+
+/* ============================= 状態管理 ============================= */
+let DATA = { sessions: [], progress: {} };
+let screen = 'loading';
+let currentQuiz = null;
+let historyDetailId = null;
+let employeeName = null;
+let employeeStore = null;
+let pendingStore = null; // 名前入力画面で選択中(未確定)の店舗
+let nameInputError = '';
+let adminPassInput = '';
+let adminError = '';
+let adminEmployees = null; // 管理者ダッシュボード用の全従業員データ
+let adminFailedCount = 0; // 読み込みに失敗した人数(診断用)
+let confirmingReset = false;
+
+/* =====================================================================
+   保存の仕組み(Claudeアカウント不要・無料)
+   - 個人データ(名前・店舗・自分の進捗) → ブラウザのlocalStorage
+   - 共有データ(店長が見る全員の成績)   → Google Apps Script(無料)経由でGoogleスプレッドシートに保存
+   BACKEND_URL は、店長側でGoogle Apps Scriptを公開した後に発行されるURLに書き換えてください。
+   セットアップ手順は会話内の案内を参照してください。
+===================================================================== */
+const BACKEND_URL = 'https://script.google.com/macros/s/AKfycby6DixkGm_8rBlPwDHz84XiXXP8MxHUHdgOytD5EmiDx6lNu0LTRTz5tD-fJwJt7QPVDA/exec';
+const backendConfigured = () => BACKEND_URL && BACKEND_URL.indexOf('https://script.google.com/') === 0;
+let backendError = null; // 共有保存で直近に発生したエラー(表示用)
+
+const appStorage = {
+  async get(key, shared){
+    if(!shared){
+      const v = localStorage.getItem(key);
+      if(v === null) throw new Error('not found: ' + key);
+      return { key, value: v, shared };
+    }
+    if(!backendConfigured()) throw new Error('BACKEND_URL が未設定です');
+    const res = await fetch(`${BACKEND_URL}?action=get&key=${encodeURIComponent(key)}`);
+    if(!res.ok) throw new Error('Storage get failed: HTTP ' + res.status);
+    const data = await res.json();
+    if(!data.found) throw new Error('not found: ' + key);
+    return { key, value: data.value, shared };
+  },
+  async set(key, value, shared){
+    if(!shared){
+      localStorage.setItem(key, value);
+      return { key, value, shared };
+    }
+    if(!backendConfigured()) throw new Error('BACKEND_URL が未設定です');
+    const res = await fetch(BACKEND_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Apps ScriptのCORSプリフライト回避のためtext/plainで送る
+      body: JSON.stringify({ action:'set', key, value })
+    });
+    if(!res.ok) throw new Error('Storage set failed: HTTP ' + res.status);
+    return { key, value, shared };
+  },
+  async delete(key, shared){
+    if(!shared){
+      localStorage.removeItem(key);
+      return { key, deleted:true, shared };
+    }
+    if(!backendConfigured()) throw new Error('BACKEND_URL が未設定です');
+    const res = await fetch(BACKEND_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action:'delete', key })
+    });
+    if(!res.ok) throw new Error('Storage delete failed: HTTP ' + res.status);
+    return { key, deleted:true, shared };
+  },
+  async list(prefix, shared){
+    if(!shared){
+      const keys = [];
+      for(let i=0;i<localStorage.length;i++){ const k = localStorage.key(i); if(!prefix || k.indexOf(prefix)===0) keys.push(k); }
+      return { keys, prefix, shared };
+    }
+    if(!backendConfigured()) throw new Error('BACKEND_URL が未設定です');
+    const res = await fetch(`${BACKEND_URL}?action=list&prefix=${encodeURIComponent(prefix||'')}`);
+    if(!res.ok) throw new Error('Storage list failed: HTTP ' + res.status);
+    const data = await res.json();
+    return { keys: data.keys||[], prefix, shared };
+  }
+};
+
+function employeeKey(){ return `${employeeStore}::${employeeName}`; }
+
+async function loadData(){
+  try{
+    const nameRes = await appStorage.get(NAME_KEY, false);
+    if(nameRes && nameRes.value){ employeeName = nameRes.value; }
+  }catch(e){ /* 未登録 */ }
+  try{
+    const storeRes = await appStorage.get(STORE_KEY, false);
+    if(storeRes && storeRes.value){ employeeStore = storeRes.value; }
+  }catch(e){ /* 未登録 */ }
+  try{
+    const res = await appStorage.get(STORAGE_KEY, false);
+    if(res && res.value){ DATA = JSON.parse(res.value); }
+  }catch(e){ /* 初回はキーが無い */ }
+  if(!DATA.sessions) DATA.sessions = [];
+  if(!DATA.progress) DATA.progress = {};
+  if(!DATA.maxReached) DATA.maxReached = {};
+  LEVELS.forEach(l => {
+    if(typeof DATA.progress[l] !== 'number') DATA.progress[l] = 0;
+    if(typeof DATA.maxReached[l] !== 'number') DATA.maxReached[l] = 0;
+  });
+  screen = (employeeName && employeeStore) ? 'home' : 'nameGate';
+  render();
+}
+
+function renderStorageWarning(){
+  if(backendConfigured()) return '';
+  return `<div class="feedback ng" style="margin-bottom:14px;">
+    ⚠️ 店長の成績集計機能(共有保存)がまだ設定されていません。<br>
+    クイズ自体はこのままお使いいただけますが、店長のダッシュボードには反映されません。<br>
+    設定方法は管理者にお問い合わせください。
+  </div>`;
+}
+
+/* この端末に保存された名前・店舗・進捗をすべて消して、最初の画面に戻す(テスト用・端末の使い回し用) */
+async function resetDevice(){
+  try{ await appStorage.delete(NAME_KEY, false); }catch(e){ /* 無視 */ }
+  try{ await appStorage.delete(STORE_KEY, false); }catch(e){ /* 無視 */ }
+  try{ await appStorage.delete(STORAGE_KEY, false); }catch(e){ /* 無視 */ }
+  employeeName = null;
+  employeeStore = null;
+  pendingStore = null;
+  DATA = { sessions: [], progress: {}, maxReached: {} };
+  LEVELS.forEach(l => { DATA.progress[l] = 0; DATA.maxReached[l] = 0; });
+  lastSaveStatus = { personalOk:null, personalError:null, sharedOk:null, sharedError:null, indexOk:null, indexError:null };
+  confirmingReset = false;
+  screen = 'nameGate';
+  render();
+}
+
+async function saveEmployeeProfile(name){
+  if(!pendingStore){ nameInputError = '店舗を選択してください'; render(); return; }
+  const trimmed = name.trim();
+  if(trimmed.length === 0){ nameInputError = '名前を入力してください'; render(); return; }
+  if(trimmed.length > 20){ nameInputError = '20文字以内で入力してください'; render(); return; }
+  employeeStore = pendingStore;
+  employeeName = trimmed;
+  try{ await appStorage.set(STORE_KEY, employeeStore, false); }
+  catch(e){ console.error('店舗の保存に失敗しました', e); }
+  try{ await appStorage.set(NAME_KEY, employeeName, false); }
+  catch(e){ console.error('名前の保存に失敗しました', e); }
+  screen = 'home';
+  render();
+}
+
+let lastSaveStatus = { personalOk:null, personalError:null, sharedOk:null, sharedError:null, indexOk:null, indexError:null };
+
+async function saveData(){
+  try{
+    await appStorage.set(STORAGE_KEY, JSON.stringify(DATA), false);
+    lastSaveStatus.personalOk = true; lastSaveStatus.personalError = null;
+  }catch(e){
+    console.error('保存に失敗しました', e);
+    lastSaveStatus.personalOk = false; lastSaveStatus.personalError = e && e.message ? e.message : String(e);
+  }
+  if(employeeName && employeeStore){
+    try{
+      await appStorage.set(EMPLOYEE_PREFIX + employeeKey(), JSON.stringify(DATA), true);
+      lastSaveStatus.sharedOk = true; lastSaveStatus.sharedError = null;
+    }catch(e){
+      console.error('管理者用の共有保存に失敗しました', e);
+      lastSaveStatus.sharedOk = false; lastSaveStatus.sharedError = e && e.message ? e.message : String(e);
+    }
+    lastSaveStatus.indexOk = true; lastSaveStatus.indexError = null; // list()方式に変更したため、索引の個別更新は不要
+  }
+}
+
+/* ============================= 管理者ダッシュボード ============================= */
+async function loadAdminDashboard(){
+  adminError = '';
+  adminEmployees = null;
+  adminFailedCount = 0;
+  screen = 'adminDashboard';
+  render();
+  try{
+    let keys = [];
+    try{
+      const listRes = await appStorage.list(EMPLOYEE_PREFIX, true);
+      keys = (listRes && listRes.keys) ? listRes.keys : [];
+    }catch(e){ /* まだ誰も挑戦していない、またはlist失敗 */ }
+
+    const employees = [];
+    const failed = [];
+    for(const key of keys){
+      const rest = key.slice(EMPLOYEE_PREFIX.length); // "店舗::名前"
+      const sep = rest.indexOf('::');
+      if(sep === -1) continue;
+      const store = rest.slice(0, sep);
+      const name = rest.slice(sep + 2);
+      let ok = false;
+      for(let attempt=0; attempt<2 && !ok; attempt++){ // 通信エラー対策で1回だけ自動リトライ
+        try{
+          const res = await appStorage.get(key, true);
+          if(res && res.value){
+            const d = JSON.parse(res.value);
+            employees.push({ store, name, data: d });
+            ok = true;
+          }
+        }catch(e){
+          if(attempt === 1){ failed.push(name); console.error('読み込み失敗:', store, name, e); }
+        }
+      }
+    }
+    adminEmployees = employees;
+    adminFailedCount = failed.length;
+  }catch(e){
+    console.error('管理者データの読み込みエラー', e);
+    adminError = '読み込みに失敗しました(' + (e && e.message ? e.message : '不明なエラー') + ')。もう一度お試しください。';
+  }
+  render();
+}
+
+/* ============================= 集計ヘルパー =============================
+   正答率は「各問題ごとの一番新しい回答」だけを使って計算する。
+   同じ問題を解き直して正解すれば、その問題は「正解」として扱われる(過去の間違いは上書きされる)。
+*/
+function latestAnswerMap(sessions, levelFilter){
+  // sessions は新しい順(unshift)で並んでいる前提。先に出てきた方を「最新」として採用する。
+  const map = new Map();
+  (sessions||[]).forEach(s=>{
+    (s.answers||[]).forEach(a=>{
+      const lvl = a.trueLevel || a.level; // 旧データ(trueLevel未保存)との互換用フォールバック
+      if(levelFilter && lvl !== levelFilter) return;
+      if(!map.has(a.qId)) map.set(a.qId, a);
+    });
+  });
+  return map;
+}
+function statsFromMap(map){
+  let correct=0, total=0;
+  map.forEach(a=>{ total++; if(a.correct) correct++; });
+  return { correct, total, pct: total? Math.round(correct/total*100) : 0 };
+}
+
+function employeeOverallStats(d){
+  const map = latestAnswerMap(d.sessions, null);
+  const s = statsFromMap(map);
+  return { ...s, sessions: (d.sessions||[]).length };
+}
+function employeeLastActive(d){
+  if(!d.sessions || d.sessions.length===0) return null;
+  return d.sessions[0].date; // sessions は unshift で新しい順
+}
+/* 指定した従業員データ(d)の、指定レベルの「直近の正答率」と「到達度」をまとめて返す */
+function employeeLevelStats(d, level){
+  const s = statsFromMap(latestAnswerMap(d.sessions, level));
+  const poolSize = QUESTIONS[level].length;
+  const reached = (d.maxReached && typeof d.maxReached[level]==='number') ? Math.min(d.maxReached[level], poolSize) : 0;
+  return { ...s, reached, poolSize };
+}
+
+function levelStats(level){ return employeeLevelStats(DATA, level); }
+function overallStats(){ return employeeOverallStats(DATA); }
+
+function currentStreak(){
+  if(DATA.sessions.length === 0) return 0;
+  const days = [...new Set(DATA.sessions.map(s => s.date.slice(0,10)))].sort().reverse();
+  let streak = 0;
+  let cursor = new Date(); cursor.setHours(0,0,0,0);
+  for(let i=0;i<days.length;i++){
+    const d = new Date(days[i]+'T00:00:00');
+    const diff = Math.round((cursor - d) / 86400000);
+    if(diff === streak){ streak++; }
+    else if(diff === streak + 1 && streak === 0){ streak++; }
+    else break;
+  }
+  return streak;
+}
+function fmtDate(iso){
+  const d = new Date(iso);
+  return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
+/* ============================= クイズロジック(順番進行・10問ずつ・一周したら最初へ) ============================= */
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function findQuestionById(qId){
+  for(const lv of LEVELS){
+    const q = QUESTIONS[lv].find(qq=>qq.id===qId);
+    if(q) return { question:q, level:lv };
+  }
+  return null;
+}
+
+/* 過去に間違えた問題をユニークに集める(直近の間違いを優先) */
+function getWrongQuestions(){
+  const map = latestAnswerMap(DATA.sessions, null); // qId -> 最新の回答
+  const list = [];
+  map.forEach(a=>{
+    if(!a.correct){
+      const found = findQuestionById(a.qId);
+      if(found) list.push({ ...found.question, trueLevel: found.level });
+    }
+  });
+  return list;
+}
+
+function startQuiz(level){
+  const pool = QUESTIONS[level];
+  const start = DATA.progress[level] % pool.length;
+  const size = Math.min(SESSION_SIZE, pool.length);
+  let picked = [];
+  for(let i=0;i<size;i++){ picked.push({ ...pool[(start+i) % pool.length], trueLevel: level }); }
+  currentQuiz = { level, pool, start, questions: picked, index: 0, answers: [], locked:false, selected:null, mode:'progress' };
+  screen = 'quiz';
+  render();
+}
+
+/* レベル内の全問題からランダムに10問。進捗には影響しない */
+function startRandomQuiz(level){
+  const pool = QUESTIONS[level];
+  const picked = shuffle(pool).slice(0, Math.min(SESSION_SIZE, pool.length)).map(q=>({ ...q, trueLevel: level }));
+  currentQuiz = { level, pool, start:null, questions: picked, index:0, answers:[], locked:false, selected:null, mode:'random' };
+  screen = 'quiz';
+  render();
+}
+
+/* 今までの間違い問題だけを集めた復習モード。進捗には影響しない */
+function startReviewMode(){
+  const wrongQuestions = getWrongQuestions(); // {question, level} 済みのtrueLevel付き
+  if(wrongQuestions.length === 0) return;
+  const picked = wrongQuestions.slice(0, Math.min(SESSION_SIZE, wrongQuestions.length));
+  currentQuiz = { level:'復習', pool: wrongQuestions, start:null, questions: picked, index:0, answers:[], locked:false, selected:null, mode:'review' };
+  screen = 'quiz';
+  render();
+}
+
+/* 履歴にある過去のセットを、同じ問題構成でもう一度。進捗には影響しない */
+function startReplaySession(sessionId){
+  const s = DATA.sessions.find(x=>x.id===sessionId);
+  if(!s) return;
+  const questions = s.answers.map(a=>{
+    const found = findQuestionById(a.qId);
+    return found ? { ...found.question, trueLevel: found.level } : null;
+  }).filter(Boolean);
+  if(questions.length === 0) return;
+  currentQuiz = { level:s.level, pool:questions, start:null, questions, index:0, answers:[], locked:false, selected:null, mode:'replay', replayOf:s.id };
+  screen = 'quiz';
+  render();
+}
+
+function submitAnswer(userValue){
+  const q = currentQuiz.questions[currentQuiz.index];
+  let correct = false;
+  if(q.type === 'mc'){ correct = (userValue === q.answer); }
+  else if(q.type === 'tf'){ correct = (userValue === q.answer); }
+  else if(q.type === 'fill'){
+    const toHalfWidth = s => String(s).replace(/[\uFF01-\uFF5E]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0xFEE0)).replace(/\u3000/g, ' ');
+    const norm = s => toHalfWidth(s).trim().toLowerCase().replace(/[\s\-‐-‑–—_]/g, '');
+    correct = q.accept.some(a => {
+      const nu = norm(userValue), na = norm(a);
+      return nu.length>0 && (nu.includes(na) || na.includes(nu));
+    });
+  }
+  currentQuiz.locked = true;
+  currentQuiz.selected = userValue;
+  currentQuiz.answers.push({
+    qId:q.id, level: currentQuiz.level, trueLevel: q.trueLevel || currentQuiz.level, type:q.type, question:q.q,
+    userAnswer:userValue, correctAnswer:(q.type==='fill'?q.accept[0]:q.answer), correct, exp:q.exp
+  });
+  render();
+}
+
+function nextQuestion(){
+  if(currentQuiz.index < currentQuiz.questions.length - 1){
+    currentQuiz.index++; currentQuiz.locked = false; currentQuiz.selected = null;
+    render();
+  } else {
+    finishQuiz();
+  }
+}
+
+function finishQuiz(){
+  const { level, pool, start, questions, answers, mode, replayOf } = currentQuiz;
+  const score = answers.filter(a=>a.correct).length;
+  const isProgress = (mode === 'progress' || !mode);
+  const session = {
+    id: 'sess_'+Date.now(), date: new Date().toISOString(), level,
+    mode: mode || 'progress',
+    replayOf: replayOf || null,
+    rangeStart: isProgress ? start+1 : null,
+    rangeEnd: isProgress ? start+questions.length : null,
+    score, total: answers.length, answers
+  };
+  DATA.sessions.unshift(session);
+  if(isProgress){
+    DATA.progress[level] = (start + questions.length) % pool.length;
+    const reachedEnd = Math.min(start + questions.length, pool.length);
+    if(!DATA.maxReached) DATA.maxReached = {};
+    DATA.maxReached[level] = Math.max(DATA.maxReached[level] || 0, reachedEnd);
+  }
+  saveData();
+  screen = 'result';
+  render();
+}
+
+function exitQuiz(){ currentQuiz = null; screen = 'home'; render(); }
+
+/* セッションの表示ラベルと「続き」ボタンの挙動をモードごとに切り替える */
+function sessionLabel(s){
+  if(s.mode === 'random') return `${s.level}・ランダム${s.total}問`;
+  if(s.mode === 'review') return `復習(苦手問題)・${s.total}問`;
+  if(s.mode === 'replay') return `${s.level}・再挑戦(${s.total}問)`;
+  return `${s.level}・${s.rangeStart}〜${s.rangeEnd}問目`;
+}
+function continueButtonLabel(s){
+  if(s.mode === 'random') return 'もう一度ランダム10問';
+  if(s.mode === 'review') return 'もう一度復習する';
+  if(s.mode === 'replay') return '同じ問題をもう一度';
+  return `続きの${s.total}問へ`;
+}
+function continueSession(){
+  const s = DATA.sessions[0];
+  if(s.mode === 'random') startRandomQuiz(s.level);
+  else if(s.mode === 'review') startReviewMode();
+  else if(s.mode === 'replay') startReplaySession(s.replayOf || s.id);
+  else startQuiz(s.level);
+}
+
+/* ============================= 描画 ============================= */
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+function renderSaveStatusNote(){
+  const st = lastSaveStatus;
+  if(st.sharedOk === null) return ''; // まだ判定できていない
+  if(st.personalOk === false){
+    return `<div class="feedback ng">⚠️ この端末への保存にも失敗しています(${escapeHtml(st.personalError||'')})。この記録はページを閉じると消える可能性があります。</div>`;
+  }
+  if(st.sharedOk === true && st.indexOk !== false){
+    return `<div class="note">✅ 管理者データに反映済みです。</div>`;
+  }
+  const reasons = [];
+  if(st.sharedOk === false) reasons.push('共有保存: ' + escapeHtml(st.sharedError||'失敗'));
+  if(st.indexOk === false) reasons.push('一覧登録: ' + escapeHtml(st.indexError||'失敗'));
+  return `<div class="feedback ng">⚠️ 管理者データへの反映に失敗しました。${reasons.join(' / ')}<br>この端末での自分の記録(履歴)には問題ありません。</div>`;
+}
+
+function levelGauge(){
+  return `<div class="strings">
+    ${LEVELS.map(lv=>{
+      const s = levelStats(lv);
+      return `<div class="string-row">
+        <div class="string-label">${lv}</div>
+        <div class="string-track"><div class="string-fill" style="width:${s.pct}%"></div></div>
+        <div class="string-pct">${s.total? s.pct+'%':'-'}</div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+function renderHome(){
+  const overall = overallStats();
+  const streak = currentStreak();
+  const wrongCount = getWrongQuestions().length;
+  return `
+    ${renderStorageWarning()}
+    <div class="plate">
+      <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+      <img class="brand-logo-img" alt="あぽろん EXCITING SOUND SHOP" src="data:image/png;base64,${LOGO_B64}">
+      <div class="eyebrow">Guitar Knowledge Log</div>
+      <h1>ギター知識ノート</h1>
+      <div class="sub">エレキ・アコースティック特化。1回10問・約5分。</div>
+      ${levelGauge()}
+    </div>
+
+    <div class="card">
+      <div class="stat-grid">
+        <div class="stat"><div class="num">${overall.sessions}</div><div class="lbl">総回数</div></div>
+        <div class="stat"><div class="num">${overall.pct}%</div><div class="lbl">正答率</div></div>
+        <div class="stat"><div class="num">${streak>0? '🔥'+streak : '-'}</div><div class="lbl">連続日数</div></div>
+      </div>
+      <div class="admin-link-row">
+        <span class="whoami">🏬 ${escapeHtml(employeeStore||'')}・👤 ${escapeHtml(employeeName||'')}</span>
+        <button class="link-btn" id="btn-admin">⚙ 管理者用</button>
+      </div>
+    </div>
+
+    <div class="section-title">レベルを選んで挑戦</div>
+    ${LEVELS.map(lv=>{
+      const s = levelStats(lv);
+      const pos = DATA.progress[lv];
+      const from = pos+1;
+      const to = Math.min(pos+SESSION_SIZE, s.poolSize);
+      return `
+      <div class="level-card">
+        <div class="level-head">
+          <div class="level-name">${lv}</div>
+          <div class="level-tag">${s.poolSize}問収録</div>
+        </div>
+        <div class="level-desc">${LEVEL_DESC[lv]}</div>
+        <div class="level-meta">
+          <span>正答率 <b>${s.total? s.pct+'%':'-'}</b></span>
+          <span>到達 <b>${s.reached}/${s.poolSize}問</b></span>
+        </div>
+        <div class="level-meta" style="margin-top:-6px;">
+          <span>次は <b>${from}〜${to}問目</b></span>
+        </div>
+        <button class="btn btn-primary" data-level="${lv}">続きから挑戦する →</button>
+      </div>`;
+    }).join('')}
+
+    <div class="section-title">復習</div>
+    <div class="level-card">
+      <div class="level-head">
+        <div class="level-name">苦手問題を復習</div>
+        <div class="level-tag">${wrongCount}問</div>
+      </div>
+      <div class="level-desc">今まで間違えた問題だけをまとめて出題します。</div>
+      ${wrongCount > 0
+        ? `<button class="btn btn-primary" id="btn-review">復習モードを始める →</button>`
+        : `<div class="note" style="margin-top:6px;">まだ間違えた問題がありません。クイズに挑戦すると、ここに苦手問題がたまっていきます。</div>`
+      }
+    </div>
+
+    <div class="section-title">記録</div>
+    <button class="btn btn-ghost" id="btn-history">これまでの履歴を見る (${DATA.sessions.length}件)</button>
+    <div class="note">※ 各レベル現在${QUESTIONS['初級'].length}問収録(目標 各${TARGET_PER_LEVEL}問)。追加リクエストで随時増やせます。</div>
+
+    <div style="margin-top:22px; text-align:center;">
+      ${confirmingReset ? `
+        <div class="feedback ng" style="text-align:left;">
+          本当にこの端末の店舗・名前・進捗をすべて消しますか?この操作は取り消せません。
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="btn-reset-confirm" style="background:linear-gradient(180deg, var(--wrong), var(--wrong));">はい、リセットする</button>
+          <button class="btn btn-ghost" id="btn-reset-cancel">キャンセル</button>
+        </div>
+      ` : `<button class="link-btn" id="btn-reset-start">🔄 この端末の店舗・名前をリセット(テスト用)</button>`}
+    </div>
+  `;
+}
+
+function renderNameGate(){
+  return `
+    ${renderStorageWarning()}
+    <div class="plate">
+      <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+      <img class="brand-logo-img" alt="あぽろん EXCITING SOUND SHOP" src="data:image/png;base64,${LOGO_B64}">
+      <div class="eyebrow">Guitar Knowledge Log</div>
+      <h1>ギター知識ノート</h1>
+      <div class="sub">はじめに、店舗とお名前を教えてください</div>
+    </div>
+    <div class="card">
+      <div class="field-label">店舗</div>
+      <div class="store-grid">
+        ${STORES.map(st=>`<button class="store-btn ${pendingStore===st?'selected':''}" data-store="${escapeHtml(st)}">${escapeHtml(st)}</button>`).join('')}
+      </div>
+      <div class="field-label" style="margin-top:16px;">名前</div>
+      <input type="text" class="fill-input" id="name-input" placeholder="例: 山田太郎" maxlength="20">
+      ${nameInputError? `<div class="feedback ng">${escapeHtml(nameInputError)}</div>` : ''}
+      <button class="btn btn-primary" id="btn-save-name" style="margin-top:6px;">はじめる →</button>
+      <div class="note">入力した内容はこの端末に記録され、次回からは自動的にスキップされます。成績は店長・管理者が確認できます。</div>
+    </div>
+  `;
+}
+
+function renderAdminGate(){
+  return `
+    <div class="topbar"><button class="link-btn" id="btn-back-home">← ホームへ</button></div>
+    <div class="plate">
+      <div class="eyebrow">Admin</div>
+      <h1>管理者ログイン</h1>
+      <div class="sub">パスコードを入力してください</div>
+    </div>
+    <div class="card">
+      <input type="password" class="fill-input" id="admin-pass-input" placeholder="パスコード" inputmode="numeric">
+      ${adminError? `<div class="feedback ng">${escapeHtml(adminError)}</div>` : ''}
+      <button class="btn btn-primary" id="btn-admin-login" style="margin-top:6px;">ログイン →</button>
+    </div>
+  `;
+}
+
+function renderAdminDashboard(){
+  if(adminError){
+    return `
+      <div class="topbar"><button class="link-btn" id="btn-back-home">← ホームへ</button></div>
+      <div class="empty">${escapeHtml(adminError)}</div>
+      <button class="btn btn-ghost" id="btn-refresh-admin" style="margin-top:14px;">もう一度試す</button>
+    `;
+  }
+  if(adminEmployees === null){
+    return `
+      <div class="topbar"><button class="link-btn" id="btn-back-home">← ホームへ</button></div>
+      <div class="loading">読み込んでいます…</div>
+    `;
+  }
+  const rows = adminEmployees.map(e=>{
+    const levelBreakdown = LEVELS.map(lv => ({ level: lv, ...employeeLevelStats(e.data, lv) }));
+    return { store:e.store, name:e.name, stats: employeeOverallStats(e.data), last: employeeLastActive(e.data), levelBreakdown };
+  });
+  const teamTotal = rows.reduce((acc,r)=>({correct:acc.correct+r.stats.correct, total:acc.total+r.stats.total}), {correct:0,total:0});
+  const teamPct = teamTotal.total? Math.round(teamTotal.correct/teamTotal.total*100) : 0;
+
+  const storeGroups = STORES.map(store => {
+    const members = rows.filter(r=>r.store===store).sort((a,b)=> b.stats.pct - a.stats.pct);
+    const storeTotal = members.reduce((acc,r)=>({correct:acc.correct+r.stats.correct, total:acc.total+r.stats.total}), {correct:0,total:0});
+    const storePct = storeTotal.total? Math.round(storeTotal.correct/storeTotal.total*100) : 0;
+    return { store, members, storePct };
+  }).filter(g => g.members.length > 0);
+
+  return `
+    <div class="topbar"><button class="link-btn" id="btn-back-home">← ホームへ</button></div>
+    <div class="plate">
+      <div class="eyebrow">Admin Dashboard</div>
+      <h1>全員の成績</h1>
+      <div class="sub">${rows.length}名分の記録・全店舗正答率 ${teamPct}%</div>
+    </div>
+    ${adminFailedCount > 0 ? `<div class="feedback ng" style="margin-top:12px;">⚠️ ${adminFailedCount}名分の読み込みに失敗しました(通信エラーの可能性)。「再読み込み」をもう一度お試しください。</div>` : ''}
+    ${rows.length===0? `<div class="empty">まだ誰も挑戦していません。</div>` : storeGroups.map(g => `
+      <div class="store-heading">${escapeHtml(g.store)}<span class="store-sub">${g.members.length}名・店舗正答率 ${g.storePct}%</span></div>
+      <div class="card" style="padding:0; overflow:hidden; margin-top:6px;">
+        ${g.members.map((r,i)=>`
+          <div class="admin-row">
+            <div class="admin-rank">${i+1}</div>
+            <div class="admin-info">
+              <div class="admin-name">${escapeHtml(r.name)}</div>
+              <div class="admin-sub">${r.stats.sessions}回・${r.last? fmtDate(r.last):'-'}</div>
+              <div class="admin-levels">
+                ${r.levelBreakdown.map(lb=>`<span>${lb.level} <b>${lb.reached}/${lb.poolSize}</b>問・<b>${lb.total? lb.pct+'%':'-'}</b></span>`).join('')}
+              </div>
+            </div>
+            <div class="admin-pct">${r.stats.total? r.stats.pct+'%' : '-'}</div>
+          </div>
+        `).join('')}
+      </div>
+    `).join('')}
+    <button class="btn btn-ghost" id="btn-refresh-admin" style="margin-top:14px;">再読み込み</button>
+  `;
+}
+
+function renderQuiz(){
+  const { questions, index, locked, answers, level } = currentQuiz;
+  const q = questions[index];
+  const progressPct = Math.round((index/(questions.length))*100);
+  let bodyHtml = '';
+
+  if(q.type === 'mc'){
+    bodyHtml = q.options.map(opt=>{
+      let cls = 'choice';
+      if(locked){
+        if(opt === q.answer) cls += ' reveal-correct';
+        if(opt === currentQuiz.selected && opt !== q.answer) cls += ' selected-wrong';
+        if(opt === currentQuiz.selected && opt === q.answer) cls += ' selected-correct';
+      }
+      return `<button class="${cls}" data-opt="${escapeHtml(opt)}" ${locked?'disabled':''}>${escapeHtml(opt)}</button>`;
+    }).join('');
+  } else if(q.type === 'tf'){
+    const opts = [ {label:'○ 正しい', val:true}, {label:'× 誤り', val:false} ];
+    bodyHtml = opts.map(o=>{
+      let cls = 'choice';
+      if(locked){
+        if(o.val === q.answer) cls += ' reveal-correct';
+        if(o.val === currentQuiz.selected && o.val !== q.answer) cls += ' selected-wrong';
+        if(o.val === currentQuiz.selected && o.val === q.answer) cls += ' selected-correct';
+      }
+      return `<button class="${cls}" data-tf="${o.val}" ${locked?'disabled':''}>${o.label}</button>`;
+    }).join('');
+  } else if(q.type === 'fill'){
+    bodyHtml = `
+      <input type="text" class="fill-input" id="fill-input" placeholder="答えを入力…" ${locked?'disabled':''} value="${locked? escapeHtml(currentQuiz.selected||'') : ''}">
+      ${!locked?'<button class="btn btn-primary" id="btn-submit-fill">回答する</button>':''}
+    `;
+  }
+
+  let feedback = '';
+  if(locked){
+    const lastAns = answers[answers.length-1];
+    feedback = `<div class="feedback ${lastAns.correct?'ok':'ng'}">
+      ${lastAns.correct? '正解◎ ' : `不正解 → 正解: ${escapeHtml(lastAns.correctAnswer)}　`}
+      ${escapeHtml(q.exp)}
+    </div>`;
+  }
+
+  return `
+    <div class="topbar">
+      <button class="link-btn" id="btn-exit">← 中断してホームへ</button>
+      <div class="q-type">${sessionLabel({level, mode:currentQuiz.mode, total:questions.length, rangeStart: currentQuiz.start!=null? currentQuiz.start+1:null, rangeEnd: currentQuiz.start!=null? currentQuiz.start+questions.length:null})} ・ ${index+1}/${questions.length}</div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${progressPct}%"></div></div>
+    <div class="card">
+      <div class="q-cat">${level}</div>
+      <div class="q-text">${escapeHtml(q.q)}</div>
+      ${bodyHtml}
+      ${feedback}
+      ${locked?`<button class="btn btn-primary" id="btn-next" style="margin-top:10px;">${index<questions.length-1?'次の問題へ →':'結果を見る →'}</button>`:''}
+    </div>
+  `;
+}
+
+function renderResult(){
+  const session = DATA.sessions[0];
+  const pct = Math.round(session.score/session.total*100);
+  return `
+    <div class="plate">
+      <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+      <div class="eyebrow">${sessionLabel(session)}</div>
+      <div class="score-hero">
+        <div class="score-num">${session.score}/${session.total}</div>
+        <div class="score-label">正答率 ${pct}%・${fmtDate(session.date)}</div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btn-continue">${continueButtonLabel(session)}</button>
+      <button class="btn btn-ghost" id="btn-home">ホームへ</button>
+    </div>
+    ${renderSaveStatusNote()}
+    <div class="section-title">見直し</div>
+    <div class="card">
+      ${session.answers.map(a=>`
+        <div class="review-item">
+          <div class="rq">${a.correct?'<span class="tag-ok">◎</span>':'<span class="tag-ng">×</span>'} ${escapeHtml(a.question)}</div>
+          <div class="ra">${a.correct? '正解' : `あなたの回答: ${escapeHtml(String(a.userAnswer))} / 正解: ${escapeHtml(String(a.correctAnswer))}`} — ${escapeHtml(a.exp)}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderHistory(){
+  if(DATA.sessions.length === 0){
+    return `
+      <div class="topbar"><button class="link-btn" id="btn-back-home">← ホームへ</button></div>
+      <div class="empty">まだ記録がありません。<br>クイズに挑戦すると、ここに履歴がたまっていきます。</div>
+    `;
+  }
+  return `
+    <div class="topbar"><button class="link-btn" id="btn-back-home">← ホームへ</button><h2 style="font-size:17px;">履歴</h2></div>
+    ${DATA.sessions.map(s=>`
+      <div class="hist-item" data-id="${s.id}">
+        <div>
+          <div class="hist-date">${fmtDate(s.date)}</div>
+          <div class="hist-sub">${sessionLabel(s)}</div>
+        </div>
+        <div class="hist-score">${s.score}/${s.total}</div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function renderHistoryDetail(){
+  const s = DATA.sessions.find(x=>x.id === historyDetailId);
+  if(!s) return renderHistory();
+  const pct = Math.round(s.score/s.total*100);
+  return `
+    <div class="topbar"><button class="link-btn" id="btn-back-history">← 履歴一覧へ</button></div>
+    <div class="plate">
+      <div class="eyebrow">${fmtDate(s.date)}・${sessionLabel(s)}</div>
+      <div class="score-hero">
+        <div class="score-num">${s.score}/${s.total}</div>
+        <div class="score-label">正答率 ${pct}%</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="btn-replay-session" data-session-id="${s.id}" style="margin-top:12px;">この問題をもう一度解く →</button>
+    <div class="card" style="margin-top:14px;">
+      ${s.answers.map(a=>`
+        <div class="review-item">
+          <div class="rq">${a.correct?'<span class="tag-ok">◎</span>':'<span class="tag-ng">×</span>'} ${escapeHtml(a.question)}</div>
+          <div class="ra">${a.correct? '正解' : `あなたの回答: ${escapeHtml(String(a.userAnswer))} / 正解: ${escapeHtml(String(a.correctAnswer))}`} — ${escapeHtml(a.exp)}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function render(){
+  const app = document.getElementById('app');
+  let html = '';
+  if(screen === 'loading') html = '<div class="loading">開いています…</div>';
+  else if(screen === 'nameGate') html = renderNameGate();
+  else if(screen === 'home') html = renderHome();
+  else if(screen === 'quiz') html = renderQuiz();
+  else if(screen === 'result') html = renderResult();
+  else if(screen === 'history') html = renderHistory();
+  else if(screen === 'historyDetail') html = renderHistoryDetail();
+  else if(screen === 'adminGate') html = renderAdminGate();
+  else if(screen === 'adminDashboard') html = renderAdminDashboard();
+  app.innerHTML = html;
+  attachEvents();
+}
+
+function attachEvents(){
+  const $ = sel => document.getElementById(sel);
+  if(screen === 'nameGate'){
+    document.querySelectorAll('[data-store]').forEach(b=>{
+      b.addEventListener('click', ()=>{ pendingStore = b.getAttribute('data-store'); nameInputError=''; render(); });
+    });
+    $('btn-save-name') && $('btn-save-name').addEventListener('click', ()=>{
+      nameInputError = '';
+      saveEmployeeProfile($('name-input').value);
+    });
+    $('name-input') && $('name-input').addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){ nameInputError=''; saveEmployeeProfile(e.target.value); }
+    });
+  }
+  if(screen === 'home'){
+    document.querySelectorAll('[data-level]').forEach(b=>{
+      b.addEventListener('click', ()=> startQuiz(b.getAttribute('data-level')));
+    });
+    $('btn-review') && $('btn-review').addEventListener('click', startReviewMode);
+    $('btn-history') && $('btn-history').addEventListener('click', ()=>{ screen='history'; render(); });
+    $('btn-admin') && $('btn-admin').addEventListener('click', ()=>{ adminPassInput=''; adminError=''; screen='adminGate'; render(); });
+    $('btn-reset-start') && $('btn-reset-start').addEventListener('click', ()=>{ confirmingReset = true; render(); });
+    $('btn-reset-confirm') && $('btn-reset-confirm').addEventListener('click', resetDevice);
+    $('btn-reset-cancel') && $('btn-reset-cancel').addEventListener('click', ()=>{ confirmingReset = false; render(); });
+  }
+  if(screen === 'adminGate'){
+    $('btn-back-home') && $('btn-back-home').addEventListener('click', ()=>{ screen='home'; render(); });
+    $('btn-admin-login') && $('btn-admin-login').addEventListener('click', ()=>{
+      const val = $('admin-pass-input').value;
+      if(val === ADMIN_PASSCODE){ adminError=''; loadAdminDashboard(); }
+      else { adminError = 'パスコードが違います'; render(); }
+    });
+    $('admin-pass-input') && $('admin-pass-input').addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){
+        if(e.target.value === ADMIN_PASSCODE){ adminError=''; loadAdminDashboard(); }
+        else { adminError = 'パスコードが違います'; render(); }
+      }
+    });
+  }
+  if(screen === 'adminDashboard'){
+    $('btn-back-home') && $('btn-back-home').addEventListener('click', ()=>{ screen='home'; render(); });
+    $('btn-refresh-admin') && $('btn-refresh-admin').addEventListener('click', loadAdminDashboard);
+  }
+  if(screen === 'quiz'){
+    $('btn-exit') && $('btn-exit').addEventListener('click', exitQuiz);
+    if(!currentQuiz.locked){
+      document.querySelectorAll('[data-opt]').forEach(b=>{
+        b.addEventListener('click', ()=> submitAnswer(b.getAttribute('data-opt')));
+      });
+      document.querySelectorAll('[data-tf]').forEach(b=>{
+        b.addEventListener('click', ()=> submitAnswer(b.getAttribute('data-tf') === 'true'));
+      });
+      $('btn-submit-fill') && $('btn-submit-fill').addEventListener('click', ()=>{
+        const val = $('fill-input').value;
+        if(val.trim().length===0) return;
+        submitAnswer(val);
+      });
+      $('fill-input') && $('fill-input').addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter'){ const val=e.target.value; if(val.trim().length>0) submitAnswer(val); }
+      });
+    }
+    $('btn-next') && $('btn-next').addEventListener('click', nextQuestion);
+  }
+  if(screen === 'result'){
+    $('btn-continue') && $('btn-continue').addEventListener('click', continueSession);
+    $('btn-home') && $('btn-home').addEventListener('click', ()=>{ screen='home'; render(); });
+  }
+  if(screen === 'history'){
+    $('btn-back-home') && $('btn-back-home').addEventListener('click', ()=>{ screen='home'; render(); });
+    document.querySelectorAll('.hist-item').forEach(item=>{
+      item.addEventListener('click', ()=>{ historyDetailId = item.getAttribute('data-id'); screen='historyDetail'; render(); });
+    });
+  }
+  if(screen === 'historyDetail'){
+    $('btn-back-history') && $('btn-back-history').addEventListener('click', ()=>{ screen='history'; render(); });
+    $('btn-replay-session') && $('btn-replay-session').addEventListener('click', (e)=>{
+      startReplaySession(e.target.getAttribute('data-session-id'));
+    });
+  }
+}
+
+loadData();
+</script>
+</body>
+</html>
